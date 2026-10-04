@@ -1,54 +1,19 @@
 function App() {
-  const properties = [
-  {
-  name: "Sandy Feet Retreat",
-  location: "Surfside Beach, SC"
-  },
-  {
-  name: "Half Shell Beach Cottage",
-  location: "Surfside Beach, SC"
-  },
-  {
-  name: "Cape Charles Coastal Retreat",
-  location: "Cape Charles, VA"
-  },
-  {
-  name: "Lake Hartwell Waterfront Retreat",
-  location: "Anderson, SC"
-  },
-  {
-  name: "Anderson Lake Escape",
-  location: "Anderson, SC"
-  }
-  ];
-   
   return (
-  <div style={{ padding: "40px", fontFamily: "Arial" }}>
-  <h1>Southern Shores Vacation Rentals</h1>
-  <p>
-  Beach, lake, and coastal getaways across South Carolina and Virginia.
-  </p>
-   
-  <h2>Our Properties</h2>
-   
-  {properties.map((property, index) => (
-  <div
-  key={index}
-  style={{
-  border: "1px solid #ddd",
-  padding: "20px",
-  marginBottom: "15px",
-  borderRadius: "8px"
-  }}
-  >
-  <h3>{property.name}</h3>
-  <p>{property.location}</p>
-  <button>Reserve Now</button>
-  </div>
-  ))}
-  </div>
+    <div style={{ textAlign: "center", padding: "50px" }}>
+      <h1>Southern Shores Vacation Rentals</h1>
+
+      <h2>Our Properties</h2>
+
+      <ul>
+        <li>Sandy Feet Retreat</li>
+        <li>Half Shell Beach Cottage</li>
+        <li>Cape Escape</li>
+        <li>Tigertown Lake Escape</li>
+        <li>Tigertown Lakeside Retreat</li>
+      </ul>
+    </div>
   );
-  }
-   
-  export default App;
-  
+}
+
+export default App;
