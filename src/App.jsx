@@ -9,8 +9,8 @@ function App() {
         <li>Sandy Feet Retreat</li>
         <li>Half Shell Beach Cottage</li>
         <li>Cape Escape</li>
-        <li>Tigertown Lake Escape</li>
-        <li>Tigertown Lakeside Retreat</li>
+        <li>Tiger Town Lake Escape</li>
+        <li>Tiger Town Lake Side Retreat</li>
       </ul>
     </div>
   );
