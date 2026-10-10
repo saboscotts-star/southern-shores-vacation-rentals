@@ -1,268 +1,4 @@
-import { useState, useEffect, createElement } from "react";
-
-function PropertyRates({ property }) {
-  return (
-    <section
-      style={{
-        marginTop: "28px",
-        paddingTop: "24px",
-        borderTop: "1px solid #d9e2e4",
-      }}
-    >
-      <h3
-        style={{
-          margin: "0 0 16px",
-          color: "#153e49",
-          fontSize: "26px",
-        }}
-      >
-        Rates & Fees
-      </h3>
-
-      <div
-        style={{
-          backgroundColor: "#f7faf9",
-          border: "1px solid #d9e5e0",
-          borderRadius: "12px",
-          padding: "18px",
-        }}
-      >
-        <div
-          style={{
-            fontSize: "22px",
-            fontWeight: "bold",
-            color: "#153e49",
-            marginBottom: "14px",
-          }}
-        >
-          Base rate: ${property.baseRate}/night
-        </div>
-
-        <div
-          style={{
-            lineHeight: "1.9",
-            color: "#4f646a",
-          }}
-        >
-          <div>Cleaning fee: ${property.cleaningFee} per stay</div>
-          <div>Pet fee: ${property.petFee} per stay</div>
-          <div>Weekly stay discount: {property.weeklyDiscount}%</div>
-          <div>Monthly stay discount: {property.monthlyDiscount}%</div>
-        </div>
-
-        <p
-          style={{
-            margin: "14px 0 0",
-            fontSize: "13px",
-            color: "#74868a",
-          }}
-        >
-          Nightly rates may vary by date and season.
-        </p>
-      </div>
-    </section>
-  );
-}
-function AvailabilityCalendar({ property }) {
-  const [blockedDates, setBlockedDates] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [monthOffset, setMonthOffset] = useState(0);
-
-  useEffect(() => {
-    if (!property?.availabilityKey) return;
-
-    const controller = new AbortController();
-
-    setLoading(true);
-    setError("");
-
-    fetch(
-      "/api/availability?property=" +
-        encodeURIComponent(property.availabilityKey),
-      { signal: controller.signal }
-    )
-      .then((response) => {
-        if (!response.ok) throw new Error("Unable to load availability");
-        return response.json();
-      })
-      .then((data) => {
-        setBlockedDates(Array.isArray(data.blocked) ? data.blocked : []);
-        setLoading(false);
-      })
-      .catch((err) => {
-        if (err.name !== "AbortError") {
-          console.error("Availability calendar error:", err);
-          setError("Availability error: " + err.message);
-          setLoading(false);
-        }
-      }); 
-
-    return () => controller.abort();
-  }, [property?.availabilityKey]);
-
-  const today = new Date();
-
-  const displayMonth = new Date(
-    today.getFullYear(),
-    today.getMonth() + monthOffset,
-    1
-  );
-
-  const year = displayMonth.getFullYear();
-  const month = displayMonth.getMonth();
-  const firstDay = new Date(year, month, 1).getDay();
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-  const monthName = displayMonth.toLocaleDateString("en-US", {
-    month: "long",
-    year: "numeric",
-  });
-
-  const toDateString = (date) => {
-    const yyyy = date.getFullYear();
-    const mm = String(date.getMonth() + 1).padStart(2, "0");
-    const dd = String(date.getDate()).padStart(2, "0");
-
-    return `${yyyy}-${mm}-${dd}`;
-  };
-
-  const isBlocked = (date) => {
-    const dateString = toDateString(date);
-
-    return blockedDates.some(
-      ({ start, end }) => dateString >= start && dateString < end
-    );
-  };
-
-  const days = [];
-
-  for (let i = 0; i < firstDay; i += 1) {
-    days.push(<div key={`blank-${i}`} />);
-  }
-
-  for (let day = 1; day <= daysInMonth; day += 1) {
-    const date = new Date(year, month, day);
-    const blocked = isBlocked(date);
-
-    days.push(
-      <div
-        key={day}
-        title={blocked ? "Unavailable" : "Available"}
-        style={{
-          padding: "12px 4px",
-          textAlign: "center",
-          borderRadius: "8px",
-          fontWeight: "bold",
-          background: blocked ? "#e4e7e8" : "#e7f4eb",
-          color: blocked ? "#7c8588" : "#245c3d",
-          textDecoration: blocked ? "line-through" : "none",
-        }}
-      >
-        {day}
-      </div>
-    );
-  }
-
-  return (
-    <section
-      style={{
-        marginTop: "28px",
-        paddingTop: "24px",
-        borderTop: "1px solid #d9e2e4",
-      }}
-    >
-      <h3 style={{ color: "#153e49", fontSize: "26px" }}>
-        Availability
-      </h3>
-
-      {loading && <p>Loading availability...</p>}
-
-      {error && <p style={{ color: "#a33a3a" }}>{error}</p>}
-
-      {!loading && !error && (
-        <>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: "16px",
-            }}
-          >
-            <button
-              type="button"
-              disabled={monthOffset === 0}
-              onClick={() =>
-                setMonthOffset((current) => Math.max(0, current - 1))
-              }
-            >
-              ← Previous
-            </button>
-
-            <strong>{monthName}</strong>
-
-            <button
-              type="button"
-              onClick={() => setMonthOffset((current) => current + 1)}
-            >
-              Next
-            </button> 
-            </div>
-  
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(7, 1fr)",
-                gap: "6px",
-                textAlign: "center",
-                marginBottom: "8px",
-                fontWeight: "bold",
-                color: "#5f7479",
-              }}
-            >
-              {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(
-                (name) => (
-                  <div key={name}>{name}</div>
-                )
-              )}
-            </div>
-  
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(7, 1fr)",
-                gap: "6px",
-              }}
-            >
-              {days}
-            </div>
-  
-            <div
-              style={{
-                display: "flex",
-                gap: "20px",
-                marginTop: "16px",
-              }}
-            >
-              <span>🟢 Available</span>
-              <span>⚪ Unavailable</span>
-            </div>
-  
-            <p
-              style={{
-                fontSize: "13px",
-                color: "#74868a",
-                marginTop: "12px",
-              }}
-            >
-              Availability is subject to confirmation.
-            </p>
-          </>
-        )}
-      </section>
-    );
-  }
+import { useState, createElement } from "react";
 
 function App() {
   const [selectedProperty, setSelectedProperty] = useState(null);
@@ -271,9 +7,8 @@ function App() {
   const properties = [
     {
       name: "Cape Escape",
-      availabilityKey: "cape-escape",
       location: "Cape Charles, Virginia",
-      details: "Pet Friendly • Walk to Beach • Sleeps 8", 
+      details: "Pet Friendly • Walk to Beach",
       photos: [
         "/images/Cape Escape/Cover.jpeg",
         ...Array.from(
@@ -282,11 +17,11 @@ function App() {
         ),
       ],
     },
+
     {
       name: "Sandy Feet Retreat",
-      availabilityKey: "sandy-feet",
       location: "Surfside Beach, South Carolina",
-      details: "Pet Friendly • Steps to Beach • Sleeps 10", 
+      details: "Pet Friendly • Beach Getaway",
       photos: [
         "/images/Sandy Feet Retreat/Cover.jpeg",
         ...Array.from(
@@ -295,11 +30,11 @@ function App() {
         ),
       ],
     },
+
     {
       name: "Half Shell Beach Cottage",
-      availabilityKey: "half-shell",
       location: "Surfside Beach, South Carolina",
-      details: "Pet Friendly • Steps to Beach • Sleeps 6",
+      details: "Coastal Cottage • Close to Beach",
       photos: [
         "/images/Half Shell/Cover.jpeg",
         ...Array.from(
@@ -308,11 +43,11 @@ function App() {
         ),
       ],
     },
+
     {
-      name: "Tiger Town Lake Side Retreat",
-      availabilityKey: "tiger-town-lakeside",
+      name: "Tiger Town Lake Escape",
       location: "Lake Hartwell, South Carolina",
-      details: "Pet Friendly • Fire Pit • 1.3 acres Fenced Yard • Sleeps 12", 
+      details: "Waterfront • Dock • Lake Getaway",
       photos: [
         "/images/Tiger Town Lake Escape/Cover.jpeg",
         ...Array.from(
@@ -321,11 +56,11 @@ function App() {
         ),
       ],
     },
+
     {
-      name: "Tiger Town Lake Escape",
-      availabilityKey: "tiger-town-escape",
+      name: "Tiger Town Lake Side Retreat",
       location: "Lake Hartwell, South Carolina",
-      details: "Pet Friendly • Waterfall • Firepit • Sleeps 15", 
+      details: "Lake Retreat • Cabin • Firepit",
       photos: [
         "/images/Tiger Town Lake Side Retreat/Cover.jpeg",
         ...Array.from(
@@ -409,27 +144,6 @@ function App() {
     });
   }
 
-  function contactButton(label, href, filled = false) {
-    return createElement(
-      "a",
-      {
-        href,
-        style: {
-          display: "inline-block",
-          padding: "15px 26px",
-          border: "2px solid #cca25d",
-          borderRadius: "8px",
-          backgroundColor: filled ? "#cca25d" : "transparent",
-          color: filled ? "#083c4b" : "white",
-          textDecoration: "none",
-          fontSize: "17px",
-          fontWeight: "bold",
-        },
-      },
-      label
-    );
-  }
-
   return (
     <main
       style={{
@@ -503,8 +217,7 @@ function App() {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns:
-              "repeat(auto-fit, minmax(300px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
             gap: "25px",
           }}
         >
@@ -567,120 +280,6 @@ function App() {
         </div>
       </section>
 
-      <section
-        style={{
-          padding: "65px 24px",
-          textAlign: "center",
-          color: "white",
-          backgroundColor: "#083c4b",
-        }}
-      >
-        <div
-          style={{
-            maxWidth: "800px",
-            margin: "0 auto",
-          }}
-        >
-          <p
-            style={{
-              margin: "0 0 12px",
-              color: "#cca25d",
-              letterSpacing: "3px",
-              fontWeight: "bold",
-            }}
-          >
-            SOUTHERN SHORES VACATION RENTALS
-          </p>
-
-          <h2
-            style={{
-              margin: "0 0 15px",
-              fontFamily: "Georgia, serif",
-              fontSize: "clamp(32px, 5vw, 42px)",
-            }}
-          >
-            Ready to Plan Your Stay?
-          </h2>
-
-          <p
-            style={{
-              maxWidth: "650px",
-              margin: "0 auto 30px",
-              color: "#e4edef",
-              fontSize: "18px",
-              lineHeight: 1.6,
-            }}
-          >
-            Have questions about one of our properties, availability,
-            or your upcoming stay? Contact Ashley directly by phone,
-            text, or email.
-          </p>
-
-          <div
-            style={{
-              padding: "28px",
-              marginBottom: "28px",
-              border: "1px solid rgba(255,255,255,0.25)",
-              borderRadius: "14px",
-              backgroundColor: "rgba(255,255,255,0.06)",
-            }}
-          >
-            <h3
-              style={{
-                margin: "0 0 18px",
-                fontFamily: "Georgia, serif",
-                fontSize: "27px",
-              }}
-            >
-              Contact: Ashley Sabo
-            </h3>
-
-            <p
-              style={{
-                margin: "8px 0",
-                fontSize: "18px",
-              }}
-            >
-              Phone/Text: (980) 722-7660
-            </p>
-
-            <p
-              style={{
-                margin: "8px 0",
-                fontSize: "18px",
-              }}
-            >
-              Email: Essabo@aol.com
-            </p>
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              justifyContent: "center",
-              gap: "14px",
-            }}
-          >
-            {contactButton(
-              "Call Ashley",
-              "tel:+19807227660",
-              true
-            )}
-
-            {contactButton(
-              "Text Ashley",
-              "sms:+19807227660"
-            )}
-
-            {contactButton(
-              "Email Ashley",
-              "mailto:Essabo@aol.com"
-            )}
-          </div>
-        </div>
-      </section>
-
       {selectedProperty && (
         <div
           onClick={closeProperty}
@@ -725,12 +324,7 @@ function App() {
                   {selectedProperty.name}
                 </h2>
 
-                <p
-                  style={{
-                    margin: 0,
-                    color: "#77878b",
-                  }}
-                >
+                <p style={{ margin: 0, color: "#77878b" }}>
                   {selectedProperty.location}
                 </p>
               </div>
@@ -758,10 +352,7 @@ function App() {
                 backgroundColor: "#08151a",
               }}
             >
-              {galleryImage(
-                selectedProperty,
-                selectedPhoto
-              )}
+              {galleryImage(selectedProperty, selectedPhoto)}
 
               <button
                 type="button"
@@ -832,39 +423,28 @@ function App() {
                   gap: "10px",
                 }}
               >
-                {selectedProperty.photos.map(
-                  (photo, index) => (
-                    <button
-                      key={photo}
-                      type="button"
-                      onClick={() =>
-                        setSelectedPhoto(index)
-                      }
-                      aria-label={`View photo ${index + 1}`}
-                      style={{
-                        padding: 0,
-                        overflow: "hidden",
-                        border:
-                          selectedPhoto === index
-                            ? "3px solid #087184"
-                            : "3px solid transparent",
-                        borderRadius: "8px",
-                        backgroundColor: "transparent",
-                        cursor: "pointer",
-                      }}
-                    >
-                      {thumbnailImage(
-                        selectedProperty,
-                        photo,
-                        index
-                      )}
-                    </button>
-                  )
-                )}
+                {selectedProperty.photos.map((photo, index) => (
+                  <button
+                    key={photo}
+                    type="button"
+                    onClick={() => setSelectedPhoto(index)}
+                    aria-label={`View photo ${index + 1}`}
+                    style={{
+                      padding: 0,
+                      overflow: "hidden",
+                      border:
+                        selectedPhoto === index
+                          ? "3px solid #087184"
+                          : "3px solid transparent",
+                      borderRadius: "8px",
+                      backgroundColor: "transparent",
+                      cursor: "pointer",
+                    }}
+                  >
+                    {thumbnailImage(selectedProperty, photo, index)}
+                  </button>
+                ))}
               </div>
-
-              <AvailabilityCalendar property={selectedProperty} />
-
             </div>
           </div>
         </div>
