@@ -15,8 +15,8 @@ function AvailabilityCalendar({ property }) {
     setError("");
 
     fetch(
-      "https://southernshoresvacationrentals.com/api/availability?property=" +
-      encodeURIComponent(property.availabilityKey),
+      "/api/availability?property=" +
+        encodeURIComponent(property.availabilityKey),
       { signal: controller.signal }
     )
       .then((response) => {
