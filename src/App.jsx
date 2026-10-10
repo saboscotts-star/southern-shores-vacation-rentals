@@ -299,7 +299,7 @@ function App() {
       name: "Half Shell Beach Cottage",
       availabilityKey: "half-shell",
       location: "Surfside Beach, South Carolina",
-      details: "Pet Friendly • Steps to Beach • Sleeps 6", 
+      details: "Pet Friendly • Steps to Beach • Sleeps 6",
       photos: [
         "/images/Half Shell/Cover.jpeg",
         ...Array.from(
