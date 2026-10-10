@@ -17,7 +17,6 @@ function App() {
         ),
       ],
     },
-
     {
       name: "Sandy Feet Retreat",
       location: "Surfside Beach, South Carolina",
@@ -30,7 +29,6 @@ function App() {
         ),
       ],
     },
-
     {
       name: "Half Shell Beach Cottage",
       location: "Surfside Beach, South Carolina",
@@ -43,7 +41,6 @@ function App() {
         ),
       ],
     },
-
     {
       name: "Tiger Town Lake Escape",
       location: "Lake Hartwell, South Carolina",
@@ -56,7 +53,6 @@ function App() {
         ),
       ],
     },
-
     {
       name: "Tiger Town Lake Side Retreat",
       location: "Lake Hartwell, South Carolina",
@@ -144,6 +140,27 @@ function App() {
     });
   }
 
+  function contactButton(label, href, filled = false) {
+    return createElement(
+      "a",
+      {
+        href,
+        style: {
+          display: "inline-block",
+          padding: "15px 26px",
+          border: "2px solid #cca25d",
+          borderRadius: "8px",
+          backgroundColor: filled ? "#cca25d" : "transparent",
+          color: filled ? "#083c4b" : "white",
+          textDecoration: "none",
+          fontSize: "17px",
+          fontWeight: "bold",
+        },
+      },
+      label
+    );
+  }
+
   return (
     <main
       style={{
@@ -217,7 +234,8 @@ function App() {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+            gridTemplateColumns:
+              "repeat(auto-fit, minmax(300px, 1fr))",
             gap: "25px",
           }}
         >
@@ -280,6 +298,120 @@ function App() {
         </div>
       </section>
 
+      <section
+        style={{
+          padding: "65px 24px",
+          textAlign: "center",
+          color: "white",
+          backgroundColor: "#083c4b",
+        }}
+      >
+        <div
+          style={{
+            maxWidth: "800px",
+            margin: "0 auto",
+          }}
+        >
+          <p
+            style={{
+              margin: "0 0 12px",
+              color: "#cca25d",
+              letterSpacing: "3px",
+              fontWeight: "bold",
+            }}
+          >
+            SOUTHERN SHORES VACATION RENTALS
+          </p>
+
+          <h2
+            style={{
+              margin: "0 0 15px",
+              fontFamily: "Georgia, serif",
+              fontSize: "clamp(32px, 5vw, 42px)",
+            }}
+          >
+            Ready to Plan Your Stay?
+          </h2>
+
+          <p
+            style={{
+              maxWidth: "650px",
+              margin: "0 auto 30px",
+              color: "#e4edef",
+              fontSize: "18px",
+              lineHeight: 1.6,
+            }}
+          >
+            Have questions about one of our properties, availability,
+            or your upcoming stay? Contact Ashley directly by phone,
+            text, or email.
+          </p>
+
+          <div
+            style={{
+              padding: "28px",
+              marginBottom: "28px",
+              border: "1px solid rgba(255,255,255,0.25)",
+              borderRadius: "14px",
+              backgroundColor: "rgba(255,255,255,0.06)",
+            }}
+          >
+            <h3
+              style={{
+                margin: "0 0 18px",
+                fontFamily: "Georgia, serif",
+                fontSize: "27px",
+              }}
+            >
+              Contact: Ashley Sabo
+            </h3>
+
+            <p
+              style={{
+                margin: "8px 0",
+                fontSize: "18px",
+              }}
+            >
+              Phone/Text: (980) 722-7660
+            </p>
+
+            <p
+              style={{
+                margin: "8px 0",
+                fontSize: "18px",
+              }}
+            >
+              Email: Essabo@aol.com
+            </p>
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              gap: "14px",
+            }}
+          >
+            {contactButton(
+              "Call Ashley",
+              "tel:+19807227660",
+              true
+            )}
+
+            {contactButton(
+              "Text Ashley",
+              "sms:+19807227660"
+            )}
+
+            {contactButton(
+              "Email Ashley",
+              "mailto:Essabo@aol.com"
+            )}
+          </div>
+        </div>
+      </section>
+
       {selectedProperty && (
         <div
           onClick={closeProperty}
@@ -324,7 +456,12 @@ function App() {
                   {selectedProperty.name}
                 </h2>
 
-                <p style={{ margin: 0, color: "#77878b" }}>
+                <p
+                  style={{
+                    margin: 0,
+                    color: "#77878b",
+                  }}
+                >
                   {selectedProperty.location}
                 </p>
               </div>
@@ -352,7 +489,10 @@ function App() {
                 backgroundColor: "#08151a",
               }}
             >
-              {galleryImage(selectedProperty, selectedPhoto)}
+              {galleryImage(
+                selectedProperty,
+                selectedPhoto
+              )}
 
               <button
                 type="button"
@@ -423,27 +563,35 @@ function App() {
                   gap: "10px",
                 }}
               >
-                {selectedProperty.photos.map((photo, index) => (
-                  <button
-                    key={photo}
-                    type="button"
-                    onClick={() => setSelectedPhoto(index)}
-                    aria-label={`View photo ${index + 1}`}
-                    style={{
-                      padding: 0,
-                      overflow: "hidden",
-                      border:
-                        selectedPhoto === index
-                          ? "3px solid #087184"
-                          : "3px solid transparent",
-                      borderRadius: "8px",
-                      backgroundColor: "transparent",
-                      cursor: "pointer",
-                    }}
-                  >
-                    {thumbnailImage(selectedProperty, photo, index)}
-                  </button>
-                ))}
+                {selectedProperty.photos.map(
+                  (photo, index) => (
+                    <button
+                      key={photo}
+                      type="button"
+                      onClick={() =>
+                        setSelectedPhoto(index)
+                      }
+                      aria-label={`View photo ${index + 1}`}
+                      style={{
+                        padding: 0,
+                        overflow: "hidden",
+                        border:
+                          selectedPhoto === index
+                            ? "3px solid #087184"
+                            : "3px solid transparent",
+                        borderRadius: "8px",
+                        backgroundColor: "transparent",
+                        cursor: "pointer",
+                      }}
+                    >
+                      {thumbnailImage(
+                        selectedProperty,
+                        photo,
+                        index
+                      )}
+                    </button>
+                  )
+                )}
               </div>
             </div>
           </div>
