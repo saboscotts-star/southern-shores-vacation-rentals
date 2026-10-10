@@ -42,7 +42,7 @@ function App() {
       ],
     },
     {
-      name: "Tiger Town Lake Escape",
+      name: "Tiger Town Lake Side Retreat",
       location: "Lake Hartwell, South Carolina",
       details: "Waterfront • Dock • Lake Getaway",
       photos: [
@@ -54,7 +54,7 @@ function App() {
       ],
     },
     {
-      name: "Tiger Town Lake Side Retreat",
+      name: "Tiger Town Lake Escape",
       location: "Lake Hartwell, South Carolina",
       details: "Lake Retreat • Cabin • Firepit",
       photos: [
