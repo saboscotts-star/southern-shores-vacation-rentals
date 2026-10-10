@@ -29,10 +29,11 @@ function AvailabilityCalendar({ property }) {
       })
       .catch((err) => {
         if (err.name !== "AbortError") {
-          setError("Availability is temporarily unavailable.");
+          console.error("Availability calendar error:", err);
+          setError("Availability error: " + err.message);
           setLoading(false);
         }
-      });
+      }); 
 
     return () => controller.abort();
   }, [property?.availabilityKey]);
