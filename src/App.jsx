@@ -1,5 +1,68 @@
 import { useState, useEffect, createElement } from "react";
 
+function PropertyRates({ property }) {
+  return (
+    <section
+      style={{
+        marginTop: "28px",
+        paddingTop: "24px",
+        borderTop: "1px solid #d9e2e4",
+      }}
+    >
+      <h3
+        style={{
+          margin: "0 0 16px",
+          color: "#153e49",
+          fontSize: "26px",
+        }}
+      >
+        Rates & Fees
+      </h3>
+
+      <div
+        style={{
+          backgroundColor: "#f7faf9",
+          border: "1px solid #d9e5e0",
+          borderRadius: "12px",
+          padding: "18px",
+        }}
+      >
+        <div
+          style={{
+            fontSize: "22px",
+            fontWeight: "bold",
+            color: "#153e49",
+            marginBottom: "14px",
+          }}
+        >
+          Base rate: ${property.baseRate}/night
+        </div>
+
+        <div
+          style={{
+            lineHeight: "1.9",
+            color: "#4f646a",
+          }}
+        >
+          <div>Cleaning fee: ${property.cleaningFee} per stay</div>
+          <div>Pet fee: ${property.petFee} per stay</div>
+          <div>Weekly stay discount: {property.weeklyDiscount}%</div>
+          <div>Monthly stay discount: {property.monthlyDiscount}%</div>
+        </div>
+
+        <p
+          style={{
+            margin: "14px 0 0",
+            fontSize: "13px",
+            color: "#74868a",
+          }}
+        >
+          Nightly rates may vary by date and season.
+        </p>
+      </div>
+    </section>
+  );
+}
 function AvailabilityCalendar({ property }) {
   const [blockedDates, setBlockedDates] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -223,7 +286,7 @@ function App() {
       name: "Sandy Feet Retreat",
       availabilityKey: "sandy-feet",
       location: "Surfside Beach, South Carolina",
-      details: "Pet Friendly • Beach Getaway • Sleeps 10", 
+      details: "Pet Friendly • Steps to Beach • Sleeps 10", 
       photos: [
         "/images/Sandy Feet Retreat/Cover.jpeg",
         ...Array.from(
@@ -236,7 +299,7 @@ function App() {
       name: "Half Shell Beach Cottage",
       availabilityKey: "half-shell",
       location: "Surfside Beach, South Carolina",
-      details: "Coastal Cottage • Close to Beach • Sleeps 6", 
+      details: "Pet Friendly • Steps to Beach • Sleeps 6", 
       photos: [
         "/images/Half Shell/Cover.jpeg",
         ...Array.from(
@@ -249,7 +312,7 @@ function App() {
       name: "Tiger Town Lake Side Retreat",
       availabilityKey: "tiger-town-lakeside",
       location: "Lake Hartwell, South Carolina",
-      details: "Waterfront • Fire Pit • Lake Getaway • Sleeps 12", 
+      details: "Pet Friendly • Fire Pit • 1.3 acres Fenced Yard • Sleeps 12", 
       photos: [
         "/images/Tiger Town Lake Escape/Cover.jpeg",
         ...Array.from(
@@ -262,7 +325,7 @@ function App() {
       name: "Tiger Town Lake Escape",
       availabilityKey: "tiger-town-escape",
       location: "Lake Hartwell, South Carolina",
-      details: "Lake Retreat • Cabin • Firepit • Sleeps 15", 
+      details: "Pet Friendly • Waterfall • Firepit • Sleeps 15", 
       photos: [
         "/images/Tiger Town Lake Side Retreat/Cover.jpeg",
         ...Array.from(
@@ -799,7 +862,9 @@ function App() {
                   )
                 )}
               </div>
+
               <AvailabilityCalendar property={selectedProperty} />
+
             </div>
           </div>
         </div>
