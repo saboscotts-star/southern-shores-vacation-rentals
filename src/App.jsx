@@ -210,7 +210,7 @@ function App() {
       name: "Cape Escape",
       availabilityKey: "cape-escape",
       location: "Cape Charles, Virginia",
-      details: "Pet Friendly • Walk to Beach",
+      details: "Pet Friendly • Walk to Beach • Sleeps 8", 
       photos: [
         "/images/Cape Escape/Cover.jpeg",
         ...Array.from(
@@ -223,7 +223,7 @@ function App() {
       name: "Sandy Feet Retreat",
       availabilityKey: "sandy-feet",
       location: "Surfside Beach, South Carolina",
-      details: "Pet Friendly • Beach Getaway",
+      details: "Pet Friendly • Beach Getaway • Sleeps 10", 
       photos: [
         "/images/Sandy Feet Retreat/Cover.jpeg",
         ...Array.from(
@@ -236,7 +236,7 @@ function App() {
       name: "Half Shell Beach Cottage",
       availabilityKey: "half-shell",
       location: "Surfside Beach, South Carolina",
-      details: "Coastal Cottage • Close to Beach",
+      details: "Coastal Cottage • Close to Beach • Sleeps 6", 
       photos: [
         "/images/Half Shell/Cover.jpeg",
         ...Array.from(
@@ -249,7 +249,7 @@ function App() {
       name: "Tiger Town Lake Side Retreat",
       availabilityKey: "tiger-town-lakeside",
       location: "Lake Hartwell, South Carolina",
-      details: "Waterfront • Dock • Lake Getaway",
+      details: "Waterfront • Fire Pit • Lake Getaway • Sleeps 12", 
       photos: [
         "/images/Tiger Town Lake Escape/Cover.jpeg",
         ...Array.from(
@@ -262,7 +262,7 @@ function App() {
       name: "Tiger Town Lake Escape",
       availabilityKey: "tiger-town-escape",
       location: "Lake Hartwell, South Carolina",
-      details: "Lake Retreat • Cabin • Firepit",
+      details: "Lake Retreat • Cabin • Firepit • Sleeps 15", 
       photos: [
         "/images/Tiger Town Lake Side Retreat/Cover.jpeg",
         ...Array.from(
