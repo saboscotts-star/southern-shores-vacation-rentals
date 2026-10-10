@@ -1,4 +1,204 @@
-import { useState, createElement } from "react";
+import { useState, useEffect, createElement } from "react";
+
+function AvailabilityCalendar({ property }) {
+  const [blockedDates, setBlockedDates] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [monthOffset, setMonthOffset] = useState(0);
+
+  useEffect(() => {
+    if (!property?.availabilityKey) return;
+
+    const controller = new AbortController();
+
+    setLoading(true);
+    setError("");
+
+    fetch(
+      "/api/availability?property=" +
+        encodeURIComponent(property.availabilityKey),
+      { signal: controller.signal }
+    )
+      .then((response) => {
+        if (!response.ok) throw new Error("Unable to load availability");
+        return response.json();
+      })
+      .then((data) => {
+        setBlockedDates(Array.isArray(data.blocked) ? data.blocked : []);
+        setLoading(false);
+      })
+      .catch((err) => {
+        if (err.name !== "AbortError") {
+          setError("Availability is temporarily unavailable.");
+          setLoading(false);
+        }
+      });
+
+    return () => controller.abort();
+  }, [property?.availabilityKey]);
+
+  const today = new Date();
+
+  const displayMonth = new Date(
+    today.getFullYear(),
+    today.getMonth() + monthOffset,
+    1
+  );
+
+  const year = displayMonth.getFullYear();
+  const month = displayMonth.getMonth();
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  const monthName = displayMonth.toLocaleDateString("en-US", {
+    month: "long",
+    year: "numeric",
+  });
+
+  const toDateString = (date) => {
+    const yyyy = date.getFullYear();
+    const mm = String(date.getMonth() + 1).padStart(2, "0");
+    const dd = String(date.getDate()).padStart(2, "0");
+
+    return `${yyyy}-${mm}-${dd}`;
+  };
+
+  const isBlocked = (date) => {
+    const dateString = toDateString(date);
+
+    return blockedDates.some(
+      ({ start, end }) => dateString >= start && dateString < end
+    );
+  };
+
+  const days = [];
+
+  for (let i = 0; i < firstDay; i += 1) {
+    days.push(<div key={`blank-${i}`} />);
+  }
+
+  for (let day = 1; day <= daysInMonth; day += 1) {
+    const date = new Date(year, month, day);
+    const blocked = isBlocked(date);
+
+    days.push(
+      <div
+        key={day}
+        title={blocked ? "Unavailable" : "Available"}
+        style={{
+          padding: "12px 4px",
+          textAlign: "center",
+          borderRadius: "8px",
+          fontWeight: "bold",
+          background: blocked ? "#e4e7e8" : "#e7f4eb",
+          color: blocked ? "#7c8588" : "#245c3d",
+          textDecoration: blocked ? "line-through" : "none",
+        }}
+      >
+        {day}
+      </div>
+    );
+  }
+
+  return (
+    <section
+      style={{
+        marginTop: "28px",
+        paddingTop: "24px",
+        borderTop: "1px solid #d9e2e4",
+      }}
+    >
+      <h3 style={{ color: "#153e49", fontSize: "26px" }}>
+        Availability
+      </h3>
+
+      {loading && <p>Loading availability...</p>}
+
+      {error && <p style={{ color: "#a33a3a" }}>{error}</p>}
+
+      {!loading && !error && (
+        <>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: "16px",
+            }}
+          >
+            <button
+              type="button"
+              disabled={monthOffset === 0}
+              onClick={() =>
+                setMonthOffset((current) => Math.max(0, current - 1))
+              }
+            >
+              ← Previous
+            </button>
+
+            <strong>{monthName}</strong>
+
+            <button
+              type="button"
+              onClick={() => setMonthOffset((current) => current + 1)}
+            >
+              Next
+            </button> 
+            </div>
+  
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(7, 1fr)",
+                gap: "6px",
+                textAlign: "center",
+                marginBottom: "8px",
+                fontWeight: "bold",
+                color: "#5f7479",
+              }}
+            >
+              {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(
+                (name) => (
+                  <div key={name}>{name}</div>
+                )
+              )}
+            </div>
+  
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(7, 1fr)",
+                gap: "6px",
+              }}
+            >
+              {days}
+            </div>
+  
+            <div
+              style={{
+                display: "flex",
+                gap: "20px",
+                marginTop: "16px",
+              }}
+            >
+              <span>🟢 Available</span>
+              <span>⚪ Unavailable</span>
+            </div>
+  
+            <p
+              style={{
+                fontSize: "13px",
+                color: "#74868a",
+                marginTop: "12px",
+              }}
+            >
+              Availability is subject to confirmation.
+            </p>
+          </>
+        )}
+      </section>
+    );
+  }
 
 function App() {
   const [selectedProperty, setSelectedProperty] = useState(null);
@@ -7,6 +207,7 @@ function App() {
   const properties = [
     {
       name: "Cape Escape",
+      availabilityKey: "cape-escape",
       location: "Cape Charles, Virginia",
       details: "Pet Friendly • Walk to Beach",
       photos: [
@@ -19,6 +220,7 @@ function App() {
     },
     {
       name: "Sandy Feet Retreat",
+      availabilityKey: "sandy-feet",
       location: "Surfside Beach, South Carolina",
       details: "Pet Friendly • Beach Getaway",
       photos: [
@@ -31,6 +233,7 @@ function App() {
     },
     {
       name: "Half Shell Beach Cottage",
+      availabilityKey: "half-shell",
       location: "Surfside Beach, South Carolina",
       details: "Coastal Cottage • Close to Beach",
       photos: [
@@ -43,6 +246,7 @@ function App() {
     },
     {
       name: "Tiger Town Lake Side Retreat",
+      availabilityKey: "tiger-town-lakeside",
       location: "Lake Hartwell, South Carolina",
       details: "Waterfront • Dock • Lake Getaway",
       photos: [
@@ -55,6 +259,7 @@ function App() {
     },
     {
       name: "Tiger Town Lake Escape",
+      availabilityKey: "tiger-town-escape",
       location: "Lake Hartwell, South Carolina",
       details: "Lake Retreat • Cabin • Firepit",
       photos: [
@@ -593,6 +798,7 @@ function App() {
                   )
                 )}
               </div>
+              <AvailabilityCalendar property={selectedProperty} />
             </div>
           </div>
         </div>
