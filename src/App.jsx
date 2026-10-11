@@ -144,7 +144,15 @@ function AvailabilityCalendar({ property }) {
 
   return (
     <section style={styles.calendarSection}>
-      <h2 style={styles.calendarTitle}>Availability</h2>
+      <h2
+  style={{
+    marginBottom: 6,
+    color: "#154f5d",
+    fontWeight: "700",
+  }}
+>
+  {property.name}
+</h2>
       {loading && <p style={styles.centerText}>Loading Vrbo availability...</p>}
       {error && (
         <p style={styles.errorText}>Availability error: {error}</p>
