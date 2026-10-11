@@ -198,7 +198,7 @@ function AvailabilityCalendar({ property }) {
 function ContactSection() {
   return (
     <section style={styles.contact}>
-      <h2 style={{ marginTop: 0 }}>Ready to Plan Your Stay?</h2>
+      <h2 style={{ marginTop: 0, color: "#E6C98F" }}>Ready to Plan Your Stay?</h2>
       <p>Contact Ashley directly with questions about a property or availability.</p>
       <p><strong>Contact:</strong> Ashley Sabo</p>
       <p><strong>Phone/Text:</strong> (980) 722-7660</p>
@@ -395,6 +395,7 @@ const styles = {
     fontSize: "clamp(46px, 7vw, 72px)",
     lineHeight: 1,
     fontWeight: "600",
+    color: "#E6C98F", 
   },
   
   brandSubtitle: {
