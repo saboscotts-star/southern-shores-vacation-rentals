@@ -384,7 +384,10 @@ const styles = {
   page: { minHeight: "100vh", background: "#f7f4ee", color: "#334b52", fontFamily: "Arial, Helvetica, sans-serif" },
   
   header: { background: "#154f5d", color: "white", padding: 24, textAlign: "center" },
-  logo: { marginTop: 0 },
+  logo: {
+    marginTop: 0,
+    color: "#E6C98F",
+  },
   heroHeader: {
     background: "linear-gradient(135deg, #123f4a 0%, #185b68 100%)",
     color: "white",
