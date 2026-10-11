@@ -308,10 +308,27 @@ export default function App() {
 
   return (
     <div style={styles.page}>
-      <header style={styles.heroHeader}>
-        <h1 style={styles.mainTitle}>Southern Shores Vacation Rentals</h1>
-        <p style={styles.tagline}>Beach escapes and lake retreats for your next getaway</p>
-      </header>
+    <header style={styles.heroHeader}>
+  <div style={styles.brandEyebrow}>
+    COASTAL BEACH & LAKE GETAWAYS
+  </div>
+
+  <h1 style={styles.mainTitle}>
+    Southern Shores
+  </h1>
+
+  <div style={styles.brandSubtitle}>
+    VACATION RENTALS
+  </div>
+
+  <div style={styles.goldRule}></div>
+
+  <p style={styles.tagline}>
+    Beach Escapes • Lake Retreats • Memorable Stays
+  </p>
+</header>
+
+
       <main style={styles.main}>
         <h2 style={styles.sectionTitle}>Our Properties</h2>
         <div style={styles.propertyGrid}>
@@ -353,11 +370,55 @@ export default function App() {
 
 const styles = {
   page: { minHeight: "100vh", background: "#f7f4ee", color: "#334b52", fontFamily: "Arial, Helvetica, sans-serif" },
-  heroHeader: { background: "#154f5d", color: "white", textAlign: "center", padding: "54px 20px" },
+  
   header: { background: "#154f5d", color: "white", padding: 24, textAlign: "center" },
   logo: { marginTop: 0 },
-  mainTitle: { margin: 0, fontSize: 42 },
-  tagline: { fontSize: 18, marginBottom: 0 },
+  heroHeader: {
+    background: "linear-gradient(135deg, #123f4a 0%, #185b68 100%)",
+    color: "white",
+    textAlign: "center",
+    padding: "72px 20px 68px",
+    borderBottom: "4px solid #c3a46b",
+  },
+  
+  brandEyebrow: {
+    fontSize: 12,
+    letterSpacing: "3px",
+    fontWeight: "700",
+    color: "#e0c99c",
+    marginBottom: 12,
+  },
+  
+  mainTitle: {
+    margin: 0,
+    fontFamily: "Georgia, 'Times New Roman', serif",
+    fontSize: "clamp(46px, 7vw, 72px)",
+    lineHeight: 1,
+    fontWeight: "600",
+  },
+  
+  brandSubtitle: {
+    marginTop: 10,
+    fontSize: 15,
+    letterSpacing: "5px",
+    fontWeight: "700",
+    color: "#f8f5ef",
+  },
+  
+  goldRule: {
+    width: 76,
+    height: 2,
+    background: "#c3a46b",
+    margin: "22px auto 20px",
+  },
+  
+  tagline: {
+    fontSize: 18,
+    margin: 0,
+    color: "#eef5f5",
+    letterSpacing: "0.3px",
+  },
+  
   main: { maxWidth: 1200, margin: "0 auto", padding: "44px 20px" },
   sectionTitle: { textAlign: "center", fontSize: 32, marginBottom: 30 },
   propertyGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 28 },
