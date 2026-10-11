@@ -3,6 +3,7 @@ function AvailabilityCalendar({ property }) {
   const [blockedDates, setBlockedDates] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [currentMonth, setCurrentMonth] = useState(new Date());
 
   useEffect(() => {
     const controller = new AbortController();
@@ -19,6 +20,7 @@ function AvailabilityCalendar({ property }) {
         if (!response.ok) {
           throw new Error("Unable to load availability");
         }
+
         return response.json();
       })
       .then((data) => {
@@ -38,39 +40,287 @@ function AvailabilityCalendar({ property }) {
     return () => controller.abort();
   }, [property.availabilityKey]);
 
+  function previousMonth() {
+    setCurrentMonth(
+      new Date(
+        currentMonth.getFullYear(),
+        currentMonth.getMonth() - 1,
+        1
+      )
+    );
+  }
+
+  function nextMonth() {
+    setCurrentMonth(
+      new Date(
+        currentMonth.getFullYear(),
+        currentMonth.getMonth() + 1,
+        1
+      )
+    );
+  }
+
+  function formatDate(year, month, day) {
+    const mm = String(month + 1).padStart(2, "0");
+    const dd = String(day).padStart(2, "0");
+
+    return `${year}-${mm}-${dd}`;
+  }
+
+  function dateIsBlocked(dateString) {
+    return blockedDates.some((range) => {
+      if (!range || !range.start) {
+        return false;
+      }
+
+      const start = String(range.start).slice(0, 10);
+      const end = range.end
+        ? String(range.end).slice(0, 10)
+        : start;
+
+      return dateString >= start && dateString < end;
+    });
+  }
+
+  const year = currentMonth.getFullYear();
+  const month = currentMonth.getMonth();
+
+  const monthTitle = currentMonth.toLocaleDateString("en-US", {
+    month: "long",
+    year: "numeric",
+  });
+
+  const firstDayOfMonth = new Date(year, month, 1).getDay();
+
+  const numberOfDays = new Date(
+    year,
+    month + 1,
+    0
+  ).getDate();
+
+  const calendarCells = [];
+
+  for (let blank = 0; blank < firstDayOfMonth; blank++) {
+    calendarCells.push(
+      <div
+        key={`blank-${blank}`}
+        style={{
+          minHeight: "60px",
+        }}
+      />
+    );
+  }
+
+  for (let day = 1; day <= numberOfDays; day++) {
+    const dateString = formatDate(year, month, day);
+    const blocked = dateIsBlocked(dateString);
+
+    calendarCells.push(
+      <div
+        key={dateString}
+        style={{
+          minHeight: "60px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          borderRadius: "8px",
+          border: "1px solid #d8d8d8",
+          backgroundColor: blocked ? "#dddddd" : "#e8f5ec",
+          color: blocked ? "#777777" : "#245c38",
+          fontWeight: "bold",
+        }}
+      >
+        {day}
+      </div>
+    );
+  }
+
   return (
     <div
       style={{
-        marginTop: "30px",
+        marginTop: "35px",
         padding: "25px",
-        background: "white",
+        backgroundColor: "white",
         borderRadius: "12px",
       }}
     >
-      <h2>Availability</h2>
+      <h2
+        style={{
+          textAlign: "center",
+          marginTop: 0,
+          color: "#3c565d",
+        }}
+      >
+        Availability
+      </h2>
 
-      {loading && <p>Loading Vrbo availability...</p>}
+      {loading && (
+        <p style={{ textAlign: "center" }}>
+          Loading Vrbo availability...
+        </p>
+      )}
 
       {error && (
-        <p style={{ color: "red" }}>
+        <p
+          style={{
+            color: "red",
+            textAlign: "center",
+          }}
+        >
           {error}
         </p>
       )}
 
       {!loading && !error && (
-        <div>
-          <p>
-            Vrbo availability connected successfully.
-          </p>
+        <>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              marginBottom: "20px",
+            }}
+          >
+            <button
+              type="button"
+              onClick={previousMonth}
+              style={{
+                width: "44px",
+                height: "44px",
+                border: 0,
+                borderRadius: "50%",
+                backgroundColor: "#087184",
+                color: "white",
+                fontSize: "24px",
+                cursor: "pointer",
+              }}
+            >
+              ‹
+            </button>
 
-          <p>
-            Blocked reservations returned: {blockedDates.length}
+            <h3
+              style={{
+                margin: 0,
+                color: "#3c565d",
+                fontSize: "22px",
+              }}
+            >
+              {monthTitle}
+            </h3>
+
+            <button
+              type="button"
+              onClick={nextMonth}
+              style={{
+                width: "44px",
+                height: "44px",
+                border: 0,
+                borderRadius: "50%",
+                backgroundColor: "#087184",
+                color: "white",
+                fontSize: "24px",
+                cursor: "pointer",
+              }}
+            >
+              ›
+            </button>
+          </div>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(7, 1fr)",
+              gap: "8px",
+              textAlign: "center",
+              marginBottom: "8px",
+              color: "#3c565d",
+              fontWeight: "bold",
+            }}
+          >
+            <div>Sun</div>
+            <div>Mon</div>
+            <div>Tue</div>
+            <div>Wed</div>
+            <div>Thu</div>
+            <div>Fri</div>
+            <div>Sat</div>
+          </div>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(7, 1fr)",
+              gap: "8px",
+            }}
+          >
+            {calendarCells}
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              gap: "24px",
+              marginTop: "20px",
+              flexWrap: "wrap",
+              color: "#3c565d",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+              }}
+            >
+              <span
+                style={{
+                  width: "18px",
+                  height: "18px",
+                  borderRadius: "4px",
+                  backgroundColor: "#e8f5ec",
+                  border: "1px solid #d8d8d8",
+                }}
+              />
+              Available
+            </div>
+
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+              }}
+            >
+              <span
+                style={{
+                  width: "18px",
+                  height: "18px",
+                  borderRadius: "4px",
+                  backgroundColor: "#dddddd",
+                  border: "1px solid #d8d8d8",
+                }}
+              />
+              Unavailable
+            </div>
+          </div>
+
+          <p
+            style={{
+              textAlign: "center",
+              marginTop: "18px",
+              color: "#777777",
+              fontSize: "14px",
+            }}
+          >
+            Availability is synchronized with Vrbo.
           </p>
-        </div>
+        </>
       )}
     </div>
   );
 }
+  
 
 function App() {
   const [selectedProperty, setSelectedProperty] = useState(null);
@@ -524,7 +774,7 @@ function App() {
               </div>
 
               <AvailabilityCalendar property={selectedProperty} /> 
-              
+
             </div>
           </div>
         </div>
