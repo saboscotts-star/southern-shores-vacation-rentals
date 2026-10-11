@@ -5,7 +5,7 @@ const properties = [
     name: "Cape Escape",
     availabilityKey: "cape-escape",
     location: "Cape Charles, Virginia",
-    details: "Pet Friendly • Walk to Beach • Sleeps 8",
+    details: "Pet Friendly • Golf Cart Rental Option • Walk to Beach • Sleeps 8",
     photos: [
       "/images/Cape Escape/Cover.jpeg",
       ...Array.from({ length: 21 }, (_, i) => `/images/Cape Escape/Photo${i + 2}.jpeg`),
@@ -15,7 +15,7 @@ const properties = [
     name: "Sandy Feet Retreat",
     availabilityKey: "sandy-feet",
     location: "Surfside Beach, South Carolina",
-    details: "Pet Friendly • Steps to Beach • Sleeps 10",
+    details: "Pet Friendly • Golf Cart Rental Option • Steps to Beach • Sleeps 10",
     photos: [
       "/images/Sandy Feet Retreat/Cover.jpeg",
       ...Array.from({ length: 19 }, (_, i) => `/images/Sandy Feet Retreat/Photo${i + 2}.jpeg`),
@@ -35,7 +35,7 @@ const properties = [
     name: "Tigertown Lakeside Retreat",
     availabilityKey: "tiger-town-escape",
     location: "Lake Hartwell, South Carolina",
-    details: "Pet Friendly • 1 Acre Fenced yard • Cabin • Fire Pit • Sleeps 12",
+    details: "Pet Friendly • 1 Acre Fenced yard • Log Cabin • Fire Pit • Sleeps 12",
     photos: [
       "/images/Tiger Town Lake Escape/Cover.jpeg",
       ...Array.from({ length: 30 }, (_, i) => `/images/Tiger Town Lake Escape/Photo${i + 2}.jpeg`),
