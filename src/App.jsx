@@ -144,15 +144,7 @@ function AvailabilityCalendar({ property }) {
 
   return (
     <section style={styles.calendarSection}>
-      <h2
-  style={{
-    marginBottom: 6,
-    color: "#154f5d",
-    fontWeight: "700",
-  }}
->
-  {property.name}
-</h2>
+  <h2 style={styles.calendarTitle}>Availability</h2>
       {loading && <p style={styles.centerText}>Loading Vrbo availability...</p>}
       {error && (
         <p style={styles.errorText}>Availability error: {error}</p>
@@ -331,7 +323,15 @@ export default function App() {
                 style: styles.cardImage,
               })}
               <div style={styles.cardContent}>
-                <h2 style={{ marginBottom: 6 }}>{property.name}</h2>
+              <h2
+  style={{
+    marginBottom: 6,
+    color: "#154f5d",
+    fontWeight: "bold",
+  }}
+>
+  {property.name}
+</h2>
                 <p style={styles.location}>{property.location}</p>
                 <p style={styles.details}>{property.details}</p>
                 <button
