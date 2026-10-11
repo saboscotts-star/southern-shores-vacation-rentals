@@ -1,4 +1,76 @@
-import { useState, createElement } from "react";
+import { useEffect, useState, createElement } from "react";
+function AvailabilityCalendar({ property }) {
+  const [blockedDates, setBlockedDates] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    setLoading(true);
+    setError("");
+
+    fetch(
+      "/api/availability?property=" +
+        encodeURIComponent(property.availabilityKey),
+      { signal: controller.signal }
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Unable to load availability");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setBlockedDates(
+          Array.isArray(data.blocked) ? data.blocked : []
+        );
+        setLoading(false);
+      })
+      .catch((err) => {
+        if (err.name !== "AbortError") {
+          console.error("Availability calendar error:", err);
+          setError("Availability error: " + err.message);
+          setLoading(false);
+        }
+      });
+
+    return () => controller.abort();
+  }, [property.availabilityKey]);
+
+  return (
+    <div
+      style={{
+        marginTop: "30px",
+        padding: "25px",
+        background: "white",
+        borderRadius: "12px",
+      }}
+    >
+      <h2>Availability</h2>
+
+      {loading && <p>Loading Vrbo availability...</p>}
+
+      {error && (
+        <p style={{ color: "red" }}>
+          {error}
+        </p>
+      )}
+
+      {!loading && !error && (
+        <div>
+          <p>
+            Vrbo availability connected successfully.
+          </p>
+
+          <p>
+            Blocked reservations returned: {blockedDates.length}
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
 
 function App() {
   const [selectedProperty, setSelectedProperty] = useState(null);
@@ -7,6 +79,7 @@ function App() {
   const properties = [
     {
       name: "Cape Escape",
+      availabilityKey: "cape-escape",
       location: "Cape Charles, Virginia",
       details: "Pet Friendly • Walk to Beach",
       photos: [
@@ -20,6 +93,7 @@ function App() {
 
     {
       name: "Sandy Feet Retreat",
+      availabilityKey: "sandy-feet",
       location: "Surfside Beach, South Carolina",
       details: "Pet Friendly • Beach Getaway",
       photos: [
@@ -33,8 +107,9 @@ function App() {
 
     {
       name: "Half Shell Beach Cottage",
+      availabilityKey: "half-shell",
       location: "Surfside Beach, South Carolina",
-      details: "Coastal Cottage • Close to Beach",
+      details: "Pet Friendly • Steps to Beach • Sleeps 6",
       photos: [
         "/images/Half Shell/Cover.jpeg",
         ...Array.from(
@@ -46,8 +121,9 @@ function App() {
 
     {
       name: "Tiger Town Lake Escape",
+      availabilityKey: "tiger-town-escape",
       location: "Lake Hartwell, South Carolina",
-      details: "Waterfront • Dock • Lake Getaway",
+      details: "Pet Friendly • Fenced Yard 1.3 acres • Cabin • Firepit • Sleeps 15",
       photos: [
         "/images/Tiger Town Lake Escape/Cover.jpeg",
         ...Array.from(
@@ -59,8 +135,9 @@ function App() {
 
     {
       name: "Tiger Town Lake Side Retreat",
+      availabilityKey: "tiger-town-lakeside",
       location: "Lake Hartwell, South Carolina",
-      details: "Lake Retreat • Cabin • Firepit",
+      details: "Pet Friendly • Waterfront • Fire Pit • Lake Getaway • Sleeps 12",
       photos: [
         "/images/Tiger Town Lake Side Retreat/Cover.jpeg",
         ...Array.from(
@@ -445,6 +522,9 @@ function App() {
                   </button>
                 ))}
               </div>
+
+              <AvailabilityCalendar property={selectedProperty} /> 
+              
             </div>
           </div>
         </div>
