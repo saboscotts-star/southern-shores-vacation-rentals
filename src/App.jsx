@@ -16,6 +16,7 @@ function AvailabilityCalendar({ property }) {
         encodeURIComponent(property.availabilityKey),
       { signal: controller.signal }
     )
+    
       .then((response) => {
         if (!response.ok) {
           throw new Error("Unable to load availability");
