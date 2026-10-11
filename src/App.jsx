@@ -6,6 +6,7 @@ const properties = [
     availabilityKey: "cape-escape",
     location: "Cape Charles, Virginia",
     details: "Pet Friendly • Golf Cart Rental Option • Walk to Beach • Sleeps 8",
+    vrboUrl: "https://www.vrbo.com/1450845",
     photos: [
       "/images/Cape Escape/Cover.jpeg",
       ...Array.from({ length: 21 }, (_, i) => `/images/Cape Escape/Photo${i + 2}.jpeg`),
@@ -16,6 +17,7 @@ const properties = [
     availabilityKey: "sandy-feet",
     location: "Surfside Beach, South Carolina",
     details: "Pet Friendly • Golf Cart Rental Option • Steps to Beach • Sleeps 10",
+    vrboUrl: "https://www.vrbo.com/632149",
     photos: [
       "/images/Sandy Feet Retreat/Cover.jpeg",
       ...Array.from({ length: 19 }, (_, i) => `/images/Sandy Feet Retreat/Photo${i + 2}.jpeg`),
@@ -26,6 +28,7 @@ const properties = [
     availabilityKey: "half-shell",
     location: "Surfside Beach, South Carolina",
     details: "Pet Friendly • Steps to Beach • Sleeps 6",
+    vrboUrl: "https://www.vrbo.com/929524",
     photos: [
       "/images/Half Shell/Cover.jpeg",
       ...Array.from({ length: 9 }, (_, i) => `/images/Half Shell/Photo${i + 2}.jpeg`),
@@ -36,6 +39,7 @@ const properties = [
     availabilityKey: "tiger-town-escape",
     location: "Lake Hartwell, South Carolina",
     details: "Pet Friendly • 1 Acre Fenced yard • Log Cabin • Fire Pit • Sleeps 12",
+    vrboUrl: "https://www.vrbo.com/2277031",
     photos: [
       "/images/Tiger Town Lake Escape/Cover.jpeg",
       ...Array.from({ length: 30 }, (_, i) => `/images/Tiger Town Lake Escape/Photo${i + 2}.jpeg`),
@@ -46,6 +50,7 @@ const properties = [
     availabilityKey: "tiger-town-lakeside",
     location: "Lake Hartwell, South Carolina",
     details: "Pet Friendly • Covered Dock • Fire Pit • Waterfall • Sleeps 15",
+    vrboUrl: "https://www.vrbo.com/4434431",
     photos: [
       "/images/Tiger Town Lake Side Retreat/Cover.jpeg",
       ...Array.from({ length: 29 }, (_, i) => `/images/Tiger Town Lake Side Retreat/Photo${i + 2}.jpeg`),
@@ -300,6 +305,13 @@ export default function App() {
           </div>
 
           <AvailabilityCalendar property={selectedProperty} />
+          <button
+  type="button"
+  onClick={() => window.open(selectedProperty.vrboUrl, "_blank")}
+  style={styles.viewButton}
+>
+  VIEW ON VRBO
+</button>
         </main>
         <ContactSection />
       </div>
