@@ -15,7 +15,7 @@ const properties = [
     name: "Sandy Feet Retreat",
     availabilityKey: "sandy-feet",
     location: "Surfside Beach, South Carolina",
-    details: "Pet Friendly • Beach Getaway • Sleeps 10",
+    details: "Pet Friendly • Steps to Beach • Sleeps 10",
     photos: [
       "/images/Sandy Feet Retreat/Cover.jpeg",
       ...Array.from({ length: 19 }, (_, i) => `/images/Sandy Feet Retreat/Photo${i + 2}.jpeg`),
@@ -25,27 +25,27 @@ const properties = [
     name: "Half Shell Beach Cottage",
     availabilityKey: "half-shell",
     location: "Surfside Beach, South Carolina",
-    details: "Pet Friendly • Coastal Cottage • Close to Beach • Sleeps 6",
+    details: "Pet Friendly • Steps to Beach • Sleeps 6",
     photos: [
       "/images/Half Shell/Cover.jpeg",
       ...Array.from({ length: 9 }, (_, i) => `/images/Half Shell/Photo${i + 2}.jpeg`),
     ],
   },
   {
-    name: "Tiger Town Lake Escape",
+    name: "Tigertown Lakeside Retreat",
     availabilityKey: "tiger-town-escape",
     location: "Lake Hartwell, South Carolina",
-    details: "Pet Friendly • Lake Retreat • Cabin • Firepit • Sleeps 15",
+    details: "Pet Friendly • 1 Acre Fenced yard • Cabin • Fire Pit • Sleeps 12",
     photos: [
       "/images/Tiger Town Lake Escape/Cover.jpeg",
       ...Array.from({ length: 30 }, (_, i) => `/images/Tiger Town Lake Escape/Photo${i + 2}.jpeg`),
     ],
   },
   {
-    name: "Tiger Town Lake Side Retreat",
+    name: "Tigertown Lake Escape",
     availabilityKey: "tiger-town-lakeside",
     location: "Lake Hartwell, South Carolina",
-    details: "Pet Friendly • Waterfront • Fire Pit • Lake Getaway • Sleeps 12",
+    details: "Pet Friendly • Covered Dock • Fire Pit • Waterfall • Sleeps 15",
     photos: [
       "/images/Tiger Town Lake Side Retreat/Cover.jpeg",
       ...Array.from({ length: 29 }, (_, i) => `/images/Tiger Town Lake Side Retreat/Photo${i + 2}.jpeg`),
