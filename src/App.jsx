@@ -8,7 +8,7 @@ const properties = [
     details: "Pet Friendly • Walk to Beach • Sleeps 8",
     photos: [
       "/images/Cape Escape/Cover.jpeg",
-      ...Array.from({ length: 23 }, (_, i) => `/images/Cape Escape/Photo${i + 2}.jpeg`),
+      ...Array.from({ length: 21 }, (_, i) => `/images/Cape Escape/Photo${i + 2}.jpeg`),
     ],
   },
   {
